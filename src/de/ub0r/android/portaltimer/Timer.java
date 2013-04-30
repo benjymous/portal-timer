@@ -102,10 +102,15 @@ public class Timer {
 	public long getTarget() {
 		return mTarget;
 	}
-
-	public CharSequence getFormatted() {
+	
+	public long getTimeLeft() {
 		final long value = (mTarget == 0) ?
 				mCooldown : max(mTarget - System.currentTimeMillis(), 0);
+		return value;
+	}
+
+	public CharSequence getFormatted() {
+		final long value = getTimeLeft();
 		return (value >= HOUR) ? showHours(value) : showMinutes(value);
 	}
 

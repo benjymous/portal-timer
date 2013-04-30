@@ -44,6 +44,20 @@ public class UpdateReceiver extends BroadcastReceiver {
 
 	private static long[] VIBRATE = new long[] { 100, 500, 500, 500, 500, 500,
 			500 };
+	
+	private static int[] ICONIDS = new int[] { 
+		R.drawable.ic_stat_timer_0, 
+		R.drawable.ic_stat_timer_0_5,
+		R.drawable.ic_stat_timer_1, 
+		R.drawable.ic_stat_timer_1_5,
+		R.drawable.ic_stat_timer_2, 
+		R.drawable.ic_stat_timer_2_5,
+		R.drawable.ic_stat_timer_3, 
+		R.drawable.ic_stat_timer_3_5,
+		R.drawable.ic_stat_timer_4,
+		R.drawable.ic_stat_timer_4_5,
+		R.drawable.ic_stat_timer_5
+	};
 
 	private long mNow = 0L;
 	private long mNextTarget = 0L;
@@ -108,10 +122,20 @@ public class UpdateReceiver extends BroadcastReceiver {
 		b.setContentIntent(PendingIntent.getActivity(context, 0, i,
 				PendingIntent.FLAG_CANCEL_CURRENT));
 
+		int icon = R.drawable.ic_stat_timer;
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {			
+			int time = 5 * 1000 * 60;
+			for (int j = 0; j < Timer.TIMER_IDS.length; j++) {
+				time = Math.min(time, (int)(timers.get(j).getTimeLeft() / (1000 * 30)));
+			}
+			icon = time > ICONIDS.length ? R.drawable.ic_stat_timer : ICONIDS[time];
+		}
+	
 		b.setContentTitle(context.getString(R.string.app_name));
 		b.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.ic_launcher));
-		b.setSmallIcon(R.drawable.ic_stat_timer);
+		b.setSmallIcon(icon);
 		b.setAutoCancel(false);
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) { // GB-
 			b.setContentText(context.getString(R.string.notification_text,
